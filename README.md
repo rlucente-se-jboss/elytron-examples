@@ -1,5 +1,4 @@
 # Elytron Examples
-## Overview
 This project demonstrates how to configure the elytron security
 subsystem when configuring CLIENT-CERT authentication with a root
 certificate authority (CA), an intermediate CA, a server certificate
