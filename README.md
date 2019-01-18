@@ -31,5 +31,5 @@ Run the application server using:
 
 Once the server is fully started, browse to https://localhost:9993
 and verify that you're prompted for your user certificate and
-authenticated to the application server.
+authenticated to the management web console.
 
