@@ -1,0 +1,155 @@
+
+embed-server --server-config=${STANDALONE_CONFIG}
+batch
+
+/subsystem=elytron/key-store=keystore:add( \
+  path=${KEYSTORE_FILE}, \
+  relative-to=jboss.server.config.dir, \
+  credential-reference={ \
+    clear-text=${KEYSTORE_PASSWORD} \
+  }, \
+  type=BCFKS, \
+  required=true \
+)
+
+/subsystem=elytron/key-manager=keymanager:add( \
+  key-store=keystore, \
+  credential-reference={ \
+    clear-text=${KEYSTORE_PASSWORD} \
+  } \
+)
+
+/subsystem=elytron/key-store=truststore:add( \
+  path=${TRUSTSTORE_FILE}, \
+  relative-to=jboss.server.config.dir, \
+  credential-reference={ \
+    clear-text=${TRUSTSTORE_PASSWORD} \
+  }, \
+  type=BCFKS, \
+  required=true \
+)
+
+/subsystem=elytron/trust-manager=trustmanager:add( \
+  key-store=truststore \
+)
+
+/subsystem=elytron/key-store-realm=truststore-realm:add( \
+  key-store=truststore \
+)
+
+/subsystem=elytron/x500-attribute-principal-decoder=cert-cn-decoder:add( \
+  oid="2.5.4.3", \
+  maximum-segments=1 \
+)
+
+/subsystem=elytron/constant-role-mapper=constant-cert-role:add( \
+  roles=[admin, guest] \
+)
+
+/subsystem=elytron/security-domain=client-cert-domain:add( \
+  realms=[{ \
+    realm=truststore-realm \
+  }, \
+  { \ 
+    realm=local, \
+    role-mapper=super-user-mapper \
+  }], \
+  default-realm=truststore-realm, \
+  permission-mapper=default-permission-mapper, \
+  principal-decoder=cert-cn-decoder, \
+  role-mapper=constant-cert-role \
+)
+
+/subsystem=elytron/http-authentication-factory=client-cert-auth:add( \
+  http-server-mechanism-factory=global, \
+  security-domain=client-cert-domain, \
+  mechanism-configurations=[{ \
+    mechanism-name=CLIENT_CERT, \
+    mechanism-realm-configurations=[{ \
+      realm-name=truststore-realm \
+    }] \
+  }] \
+) 
+
+/subsystem=elytron/sasl-authentication-factory=client-cert-auth:add( \
+  sasl-server-factory=configured, \
+  security-domain=client-cert-domain, \
+  mechanism-configurations=[{ \
+    mechanism-name=JBOSS-LOCAL-USER, \
+    mechanism-realm-configurations=[{ \
+      realm-name=local \
+    }] \
+  }] \
+)
+
+/subsystem=elytron/server-ssl-context=ssc:add( \
+  security-domain=client-cert-domain, \
+  key-manager=keymanager, \
+  protocols=["TLSv1.2"], \
+  trust-manager=trustmanager, \
+  want-client-auth=false, \
+  need-client-auth=true, \
+  cipher-suite-filter="DEFAULT", \
+  authentication-optional=false, \
+  cipher-suite-filter=" \
+    TLS_DHE_DSS_WITH_3DES_EDE_CBC_SHA, \
+    TLS_DHE_DSS_WITH_AES_128_CBC_SHA, \
+    TLS_DHE_DSS_WITH_AES_128_CBC_SHA256, \
+    TLS_DHE_DSS_WITH_AES_256_CBC_SHA, \
+    TLS_DHE_DSS_WITH_AES_256_CBC_SHA256, \
+    TLS_ECDHE_ECDSA_WITH_3DES_EDE_CBC_SHA, \
+    TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA, \
+    TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256, \
+    TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA, \
+    TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384, \
+    TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA, \
+    TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA, \
+    TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256, \
+    TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA, \
+    TLS_RSA_WITH_3DES_EDE_CBC_SHA, \
+    TLS_RSA_WITH_AES_128_CBC_SHA, \
+    TLS_RSA_WITH_AES_128_CBC_SHA256, \
+    TLS_RSA_WITH_AES_128_CCM, \
+    TLS_RSA_WITH_AES_256_CBC_SHA, \
+    TLS_RSA_WITH_AES_256_CBC_SHA256, \
+    TLS_RSA_WITH_AES_256_CCM" \
+)
+
+/core-service=management/management-interface=http-interface:write-attribute( \
+  name=ssl-context, \
+  value=ssc \
+)
+
+/core-service=management/management-interface=http-interface:write-attribute( \
+  name=secure-socket-binding, \
+  value=management-https \
+)
+
+/core-service=management/management-interface=http-interface:write-attribute( \
+  name=http-authentication-factory, \
+  value=client-cert-auth \
+)
+
+/core-service=management/management-interface=http-interface:write-attribute( \
+  name=http-upgrade.sasl-authentication-factory, \
+  value=client-cert-auth \
+)
+
+/core-service=management/management-interface=http-interface:undefine-attribute( \
+  name=security-realm \
+)
+
+/core-service=management/access=identity:write-attribute( \
+  name=security-domain, \
+  value=client-cert-domain \
+)
+
+/subsystem=elytron/http-authentication-factory=management-http-authentication:remove
+
+/subsystem=elytron/sasl-authentication-factory=management-sasl-authentication:remove
+
+/subsystem=elytron/security-domain=ManagementDomain:remove
+
+run-batch
+stop-embedded-server
+

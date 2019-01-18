@@ -1,0 +1,7 @@
+java.security.properties
+*.bcfks
+certs/*.pem
+certs/*.p12
+dist/*.jar
+dist/*.zip
+wildfly-*
