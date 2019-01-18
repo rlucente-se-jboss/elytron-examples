@@ -5,7 +5,7 @@
 PUSHD ${WORK_DIR}
   echo
 
-  echo -n "Installing wildly-${VER_INST_EAP} ............. " 
+  echo -n "Installing wildfly-${VER_INST_EAP} ............ " 
   unzip -q ${BIN_DIR}/wildfly-${VER_DIST_EAP}.zip
   ISOK
 
