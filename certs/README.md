@@ -1,4 +1,4 @@
-This folder MUST contain the following files:
+This folder *MUST* contain the following files:
 
 * `ca.cert.pem` - the root certificate authority (root CA)
 * `intermediate.cert.pem` - the intermediate certificate authority (intermediate CA)
