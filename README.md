@@ -14,6 +14,12 @@ Clone this repository to your workstation and then make sure that
 the `certs` and the `dist` directories are populated according to
 their respective `README.md` files.
 
+If using the certificates from the
+[intranet-test-certs](https://github.com/rlucente-se-jboss/intranet-test-certs),
+make sure that the `OPENSSL_DEFAULT_PASSWORD` in the file `demo.conf`
+for intranet-test-certs project matches the `KEYSTORE_PASSWORD` and
+`TRUSTSTORE_PASSWORD` in this project's `demo.conf` file.
+
 Import the files `certs/ca.cert.pem` and `certs/intermediate.cert.pem`
 into your browser as trusted authorities.  If prompted, enable the
 CA certs to identify websites.  Additionally, import `certs/client.p12`
