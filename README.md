@@ -17,7 +17,7 @@ their respective `README.md` files.
 If using the certificates from the
 [intranet-test-certs](https://github.com/rlucente-se-jboss/intranet-test-certs),
 make sure that the `OPENSSL_DEFAULT_PASSWORD` in the file `demo.conf`
-for intranet-test-certs project matches the `KEYSTORE_PASSWORD` and
+for the intranet-test-certs project matches the `KEYSTORE_PASSWORD` and
 `TRUSTSTORE_PASSWORD` in this project's `demo.conf` file.
 
 Import the files `certs/ca.cert.pem` and `certs/intermediate.cert.pem`
