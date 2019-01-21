@@ -12,7 +12,7 @@ CAs, server, and client certificates can be generated using the
 ## Prerequisites
 Clone this repository to your workstation and then make sure that
 the `certs` and the `dist` directories are populated according to
-their respective README.md files.
+their respective `README.md` files.
 
 Import the files `certs/ca.cert.pem` and `certs/intermediate.cert.pem`
 into your browser as trusted authorities.  If prompted, enable the
