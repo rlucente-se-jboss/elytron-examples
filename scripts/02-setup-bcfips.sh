@@ -6,6 +6,7 @@ PUSHD $WORK_DIR
 echo
 
 echo "Provide password if prompted by sudo"
+sudo rm -f $JRE_HOME/lib/ext/bc*.jar
 sudo cp dist/bc*.jar $JRE_HOME/lib/ext
 
 echo -n "Import root CA .............. "
@@ -73,6 +74,10 @@ keytool -list \
         -storetype bcfks \
         -storepass "${KEYSTORE_PASSWORD}" \
         -J-Djava.security.properties=java.security.properties
+
+echo "Dumping ${CRL_FILE} ... "
+keytool -printcrl \
+        -file certs/${CRL_FILE}
 
 echo
 POPD

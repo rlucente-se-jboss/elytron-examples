@@ -6,7 +6,7 @@ PUSHD ${WORK_DIR}
   echo
 
   echo -n "Copy keystores ............................. "
-  cp *.bcfks ${JBOSS_HOME}/standalone/configuration
+  cp *.bcfks certs/${CRL_FILE} ${JBOSS_HOME}/standalone/configuration
   ISOK
 
   tmpfile=$(mktemp /tmp/cli.XXXXXX)
