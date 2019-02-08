@@ -29,6 +29,14 @@ batch
   required=true \
 )
 
+# /subsystem=elytron/trust-manager=trustmanager:add( \
+#   key-store=truststore, \
+#   certificate-revocation-list={ \
+#     path=${CRL_FILE}, \
+#     relative-to=jboss.server.config.dir \
+#   } \
+# )
+
 /subsystem=elytron/trust-manager=trustmanager:add( \
   key-store=truststore \
 )
@@ -89,30 +97,8 @@ batch
   trust-manager=trustmanager, \
   want-client-auth=false, \
   need-client-auth=true, \
-  cipher-suite-filter="DEFAULT", \
   authentication-optional=false, \
-  cipher-suite-filter=" \
-    TLS_DHE_DSS_WITH_3DES_EDE_CBC_SHA, \
-    TLS_DHE_DSS_WITH_AES_128_CBC_SHA, \
-    TLS_DHE_DSS_WITH_AES_128_CBC_SHA256, \
-    TLS_DHE_DSS_WITH_AES_256_CBC_SHA, \
-    TLS_DHE_DSS_WITH_AES_256_CBC_SHA256, \
-    TLS_ECDHE_ECDSA_WITH_3DES_EDE_CBC_SHA, \
-    TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA, \
-    TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256, \
-    TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA, \
-    TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384, \
-    TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA, \
-    TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA, \
-    TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256, \
-    TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA, \
-    TLS_RSA_WITH_3DES_EDE_CBC_SHA, \
-    TLS_RSA_WITH_AES_128_CBC_SHA, \
-    TLS_RSA_WITH_AES_128_CBC_SHA256, \
-    TLS_RSA_WITH_AES_128_CCM, \
-    TLS_RSA_WITH_AES_256_CBC_SHA, \
-    TLS_RSA_WITH_AES_256_CBC_SHA256, \
-    TLS_RSA_WITH_AES_256_CCM" \
+  cipher-suite-filter="DEFAULT" \
 )
 
 /core-service=management/management-interface=http-interface:write-attribute( \
@@ -149,6 +135,41 @@ batch
 /subsystem=elytron/sasl-authentication-factory=management-sasl-authentication:remove
 
 /subsystem=elytron/security-domain=ManagementDomain:remove
+
+/subsystem=logging/logger=org.bouncycastle.jsse.provider:add(level=FINE)
+/subsystem=logging/logger=org.bouncycastle.jsse:add(level=FINE)
+/subsystem=logging/logger=org.bouncycastle.tls:add(level=FINE)
+/subsystem=logging/logger=org.bouncycastle:add(level=FINE)
+/subsystem=logging/logger=org.jboss.as.domain.http.api.undertow:add(level=TRACE)
+/subsystem=logging/logger=org.jboss.as.domain.http.api:add(level=TRACE)
+/subsystem=logging/logger=org.jboss.as.domain.http:add(level=TRACE)
+/subsystem=logging/logger=org.jboss.hal.client.bootstrap:add(level=TRACE)
+/subsystem=logging/logger=org.wildfly.security.audit:add(level=TRACE)
+/subsystem=logging/logger=org.wildfly.security.auth.server:add(level=TRACE)
+/subsystem=logging/logger=org.wildfly.security.http.basic:add(level=TRACE)
+/subsystem=logging/logger=org.wildfly.security.http.bearer:add(level=TRACE)
+/subsystem=logging/logger=org.wildfly.security.http.cert:add(level=TRACE)
+/subsystem=logging/logger=org.wildfly.security.http.digest:add(level=TRACE)
+/subsystem=logging/logger=org.wildfly.security.http.form:add(level=TRACE)
+/subsystem=logging/logger=org.wildfly.security.http.password:add(level=TRACE)
+/subsystem=logging/logger=org.wildfly.security.http.spnego:add(level=TRACE)
+/subsystem=logging/logger=org.wildfly.security.sasl.anonymous:add(level=TRACE)
+/subsystem=logging/logger=org.wildfly.security.sasl.digest:add(level=TRACE)
+/subsystem=logging/logger=org.wildfly.security.sasl.entity:add(level=TRACE)
+/subsystem=logging/logger=org.wildfly.security.sasl.external:add(level=TRACE)
+/subsystem=logging/logger=org.wildfly.security.sasl.gs2:add(level=TRACE)
+/subsystem=logging/logger=org.wildfly.security.sasl.gssapi:add(level=TRACE)
+/subsystem=logging/logger=org.wildfly.security.sasl.local:add(level=TRACE)
+/subsystem=logging/logger=org.wildfly.security.sasl.oauth2:add(level=TRACE)
+/subsystem=logging/logger=org.wildfly.security.sasl.otp:add(level=TRACE)
+/subsystem=logging/logger=org.wildfly.security.sasl.plain:add(level=TRACE)
+/subsystem=logging/logger=org.wildfly.security.sasl.scram:add(level=TRACE)
+/subsystem=logging/logger=org.wildfly.security.sasl:add(level=TRACE)
+/subsystem=logging/logger=org.wildfly.security.ssl:add(level=TRACE)
+/subsystem=logging/logger=org.wildfly.security.tls:add(level=TRACE)
+/subsystem=logging/logger=org.wildfly.security.x500.cert.acme:add(level=TRACE)
+/subsystem=logging/logger=org.wildfly.security.xml:add(level=TRACE)
+/subsystem=logging/logger=org.wildfly.security:add(level=TRACE)
 
 run-batch
 stop-embedded-server
