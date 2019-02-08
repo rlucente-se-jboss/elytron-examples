@@ -26,7 +26,8 @@ CA certs to identify websites.  Additionally, import `certs/client.p12`
 into your browser as a user certificate.
 
 ## Install
-Run the following commands to install wildfly and configure the elytron subsystem.
+Run the following commands to install wildfly and configure the
+elytron subsystem.
 
     pushd scripts && ./clean.sh && ./01-create-java-security-overrides.sh && ./02-setup-bcfips.sh && ./03-install.sh && ./04-config-auth.sh && popd
 
