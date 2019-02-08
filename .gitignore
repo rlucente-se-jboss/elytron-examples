@@ -1,5 +1,6 @@
 java.security.properties
 *.bcfks
+certs/*.crl
 certs/*.pem
 certs/*.p12
 dist/*.jar
